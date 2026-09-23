@@ -1,0 +1,9 @@
+--GENERAL:
+start_player=O
+
+--STYLES: (ANSI ESCAPE CODES)
+error_messages=[41m
+info=[30;47m
+player_X=[31m
+player_Y=[34m
+win_message=[30;42m

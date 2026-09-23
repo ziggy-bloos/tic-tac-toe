@@ -1,15 +1,9 @@
 -- Copyright (c) 2026 ZiggyBloos | ZLIB LICENSE, See LICENSE.txt for details
 
-local styles = {
-    reset = "\27[0m",
-    err = "\27[41m",
-    info = "\27[30;47m",
-    plr_x = "\27[31m",
-    plr_o = "\27[34m",
-    win = "\27[30;42m"
-}
+local conf = require("modules/config")
 
-local currPlayer = 'O'
+local start_player = conf.start_player
+local currPlayer = start_player
 
 local grid = {
     '1', '2', '3',
@@ -39,14 +33,14 @@ end
 
 local function printErr(err)
     drawGrid()
-    print(styles.err.."ERROR: "..err..styles.reset)
+    print(conf.styles.err.."ERROR: "..err..conf.styles.reset)
 end
 
 local function stampPlayer(n)
     if currPlayer == 'X' then
-        grid[n] = styles.plr_x..currPlayer..styles.reset
+        grid[n] = conf.styles.plr_x..currPlayer..conf.styles.reset
     else
-        grid[n] = styles.plr_o..currPlayer..styles.reset
+        grid[n] = conf.styles.plr_o..currPlayer..conf.styles.reset
     end
 end
 
@@ -59,7 +53,7 @@ local function switchPlayer()
 end
 
 local function reset()
-    currPlayer = 'O'
+    currPlayer = start_player
     grid = {
         '1', '2', '3',
         '4', '5', '6',
@@ -82,7 +76,7 @@ end
 
 drawGrid()
 while true do
-    io.write(styles.info.."\nCurrent player: ".. currPlayer.."  |  QUIT with 'quit'  |  RESET with 'reset'"..styles.reset.."\n")
+    io.write(conf.styles.info.."\nCurrent player: ".. currPlayer.."  |  QUIT with 'quit'  |  RESET with 'reset'"..conf.styles.reset.."\n")
 
     io.write("Place in (1-9): ")
     local n = io.read()
@@ -111,6 +105,6 @@ while true do
                 drawGrid()
             end
         end
-        print(styles.win.." "..winner.." wins! "..styles.reset)
+        print(conf.styles.win.." "..winner.." wins! "..conf.styles.reset)
     end
 end
