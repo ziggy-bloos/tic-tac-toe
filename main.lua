@@ -1,9 +1,9 @@
--- Copyright (c) 2026 ZiggyBloos | ZLIB LICENSE, See LICENSE.txt for details
+local u_os = package.config:sub(1,1)
 
 local conf = require("modules/config")
 
 local start_player = conf.start_player
-local currPlayer = start_player
+local curr_player = start_player
 
 local grid = {
     '1', '2', '3',
@@ -18,14 +18,19 @@ local win_combos = {
 }
 
 local function drawGrid()
-    os.execute("clear")
+    if u_os == "/" then
+        os.execute("clear")
+    elseif u_os == "\\" then
+        os.execute("cls")
+    end
+
     io.write("Tic Tac Toe!\n\n")
-    local currCell = 0
+    local curr_cell = 0
     for i=1, 3 do
         io.write("\n")
         for j=1, 3 do
-            currCell = currCell + 1
-            io.write("\t"..grid[currCell])
+            curr_cell = curr_cell + 1
+            io.write("\t"..grid[curr_cell])
         end
         io.write("\n\n")
     end
@@ -37,23 +42,23 @@ local function printErr(err)
 end
 
 local function stampPlayer(n)
-    if currPlayer == 'X' then
-        grid[n] = conf.styles.plr_x..currPlayer..conf.styles.reset
+    if curr_player == 'X' then
+        grid[n] = conf.styles.plr_x..curr_player..conf.styles.reset
     else
-        grid[n] = conf.styles.plr_o..currPlayer..conf.styles.reset
+        grid[n] = conf.styles.plr_o..curr_player..conf.styles.reset
     end
 end
 
 local function switchPlayer()
-    if currPlayer == 'X' then
-        currPlayer = 'O'
+    if curr_player == 'X' then
+        curr_player = 'O'
     else
-        currPlayer = 'X'
+        curr_player = 'X'
     end
 end
 
 local function reset()
-    currPlayer = start_player
+    curr_player = start_player
     grid = {
         '1', '2', '3',
         '4', '5', '6',
@@ -76,24 +81,24 @@ end
 
 drawGrid()
 while true do
-    io.write(conf.styles.info.."\nCurrent player: ".. currPlayer.."  |  QUIT with 'quit'  |  RESET with 'reset'"..conf.styles.reset.."\n")
+    io.write(conf.styles.info.."\nCurrent player: ".. curr_player.."  |  QUIT with 'quit'  |  RESET with 'reset'"..conf.styles.reset.."\n")
 
     io.write("Place in (1-9): ")
-    local n = io.read()
-    local new_n = tonumber(n)
+    local u_input = io.read()
+    local n = tonumber(u_input)
 
-    if new_n ~= nil then
-        if new_n >= 1 and new_n <= 9 then
-            if tostring(new_n) == grid[new_n] then
-                stampPlayer(new_n)
+    if n ~= nil then
+        if n >= 1 and n <= 9 then
+            if tostring(n) == grid[n] then
+                stampPlayer(n)
                 drawGrid()
                 switchPlayer()
             else printErr("Not an empty cell.") end
 
         else printErr("Enter a number within the range.") end
     else
-        if n == "quit" then break
-        elseif n == "reset" then reset()
+        if u_input == "quit" then break
+        elseif u_input == "reset" then reset()
         else printErr("Invalid input.") end
     end
 
@@ -101,7 +106,7 @@ while true do
     if winner then
         for i = 1, 9 do
             if tonumber(grid[i]) ~= nil then
-                grid[i] = "_"
+                grid[i] = "-"
                 drawGrid()
             end
         end
